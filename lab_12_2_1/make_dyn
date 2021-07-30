@@ -1,0 +1,35 @@
+CC=gcc
+INCPATH=./inc/
+OUTPATH=./out/
+SRCPATH=./src/
+UNITTESTSPATH=./unit/
+CFLAGS= -std=c99 -I$(INCPATH) -fPIC -c
+.PHONY: clean
+app.exe: $(OUTPATH) $(OUTPATH)main.o libdyn.so $(OUTPATH)funcs_dyn.o
+	mkdir -p $(OUTPATH)
+	$(CC) -o app.exe $(OUTPATH)main.o $(OUTPATH)funcs_dyn.o  -ldl -L . -ldyn
+	export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:.
+
+
+
+$(OUTPATH)main.o: $(SRCPATH)main.c $(INCPATH)funcs.h
+	$(CC) $(CFLAGS) -o$(OUTPATH)main.o $(SRCPATH)main.c
+
+
+$(OUTPATH)funcs_dyn.o: $(SRCPATH)funcs_dyn.c $(INCPATH)funcs.h
+	$(CC) $(CFLAGS) -o$(OUTPATH)funcs_dyn.o $(SRCPATH)funcs_dyn.c
+
+
+$(OUTPATH)libmalloc.o: $(SRCPATH)libmalloc.c
+	$(CC) $(CFLAGS) -o$(OUTPATH)libmalloc.o $(SRCPATH)libmalloc.c
+
+
+libdyn.so: $(OUTPATH)libmalloc.o
+	$(CC) -o libdyn.so -shared $(OUTPATH)libmalloc.o
+
+
+clean:
+	rm -fv *.exe
+	rm -fv $(OUTPATH)*.o
+	rm -fv $(OUTPATH)*.gcno
+

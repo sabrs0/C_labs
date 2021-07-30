@@ -1,0 +1,1 @@
+./app.exe pos_7_in.txt name tarantino

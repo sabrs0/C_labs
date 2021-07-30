@@ -1,0 +1,1 @@
+./app.exe pos_5_in.txt year 1994
